@@ -29,19 +29,24 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
             });
 
             res.on('end', () => {
+                const combinedData = data.join('');
+
                 const urlSearchPattern = /"videoId"\s*:\s*"(.*?)"/i;
                 const titleSearchPattern = /"(title|text)"\s*:\s*"(.*?)"/i;
+                const videoLengthSearchPattern = /"simpletext"\s*?:\s*?"((\d+:)?\d+:\d+)"/i;
 
-                const vieoUrl = urlSearchPattern.exec(data.join(''));
-                const videoTitle = titleSearchPattern.exec(data.join(''));
+                const vieoUrl = urlSearchPattern.exec(combinedData);
+                const videoTitle = titleSearchPattern.exec(combinedData);
+                const videoLength = videoLengthSearchPattern.exec(combinedData);
 
-                if (!vieoUrl || !videoTitle) {
+                if (!vieoUrl || !videoTitle || !videoLength) {
                     return void reject('The requested video was not found');
                 }
 
                 return void resolve({
                     url: `https://www.youtube.com/watch?v=${vieoUrl[1]}`,
                     title: decodeURIComponent(JSON.parse(`"${videoTitle[2].replace('"', '\\"')}"`)),
+                    length: videoLength[1],
                 });
             });
 
@@ -82,15 +87,21 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
     const currSongObj = queue.songs.items[queue.currSong];
 
     queue.playing = true;
-    const dispatcher = queue.connection.play(
-        (await ytdl(currSongObj.url, { quality: 'highestaudio' }))
+
+    let ytVideo;
+    try {
+        ytVideo = (await ytdl(currSongObj.url, { quality: 'highestaudio' }))
             .on('finish', () => onFinish(msg, queue))
             .on('error', e => {
                 console.log('Something went wrong ', e);
                 throw new Error('Something went wrong');
-            }),
-        { type: 'opus' }
-    );
+            });
+    } catch {
+        onFinish(msg, queue);
+        return void msg.channel.send('Something went wrong playing the song.');
+    }
+
+    const dispatcher = queue.connection.play(ytVideo, { type: 'opus' });
     dispatcher.setVolumeLogarithmic(1);
 
     const embed = new MessageEmbed().setTitle(currSongObj.title).setColor('b4ded4').setDescription(currSongObj.url);
