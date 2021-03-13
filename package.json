@@ -1,0 +1,23 @@
+{
+    "name": "synth",
+    "version": "1.0.0",
+    "description": "discord music bot",
+    "main": "build/index.js",
+    "scripts": {
+        "dev": "nodemon",
+        "start": "node ."
+    },
+    "author": "TheIcyColdPenguin",
+    "license": "MIT",
+    "dependencies": {
+        "discord.js": "^12.5.1",
+        "node-cleanup": "^2.1.2",
+        "node-opus": "^0.3.3",
+        "puppeteer": "^8.0.0",
+        "ytdl-core": "^4.5.0",
+        "ytdl-core-discord": "^1.2.5"
+    },
+    "devDependencies": {
+        "@types/node-cleanup": "^2.1.1"
+    }
+}
