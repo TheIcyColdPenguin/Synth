@@ -1,12 +1,12 @@
 import { MessageEmbed } from 'discord.js';
 import ytdl from 'ytdl-core';
 
-import { OwnCommand, as, assertQueueConstruct } from '../constants';
+import { OwnCommand, as, assertQueueConstruct, Song } from '../constants';
 import { getVideoDetails, isUrl, playSong } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'play',
-    aliases: ['p', 'q', 'queue'],
+    aliases: ['p', 'a', 'append', 'add'],
     description: 'Play a song/playlist or add to the queue if a song is currently playing',
     usage: 'play [song/playlist search term or url]',
 
@@ -66,7 +66,7 @@ export default as<OwnCommand>({
                     return void msg.channel.send(`${arg} - something went wrong`);
                 }
             } else {
-                let video;
+                let video: Song;
                 try {
                     video = await getVideoDetails(arg);
                 } catch (e) {
