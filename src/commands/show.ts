@@ -1,5 +1,5 @@
 import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
-import { createEmbed } from '../helpers';
+import { createEmbed, millisecondsToTimeStamp } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'show',
@@ -16,6 +16,10 @@ export default as<OwnCommand>({
             return;
         }
 
+        if (!queue.connection) {
+            return void msg.channel.send('Not currently connected to the voice channel');
+        }
+
         if (queue.songs.isEmpty()) {
             return void msg.channel.send(createEmbed('The queue is currently empty'));
         }
@@ -26,16 +30,39 @@ export default as<OwnCommand>({
                 queue.currSong - showQueueSize <= 0 ? 0 : queue.currSong - showQueueSize,
                 queue.currSong + showQueueSize
             );
-        const embed = createEmbed('Queue-').addFields(
-            songsToShow.map(song => {
-                return {
-                    name: song.title,
-                    value: song.length,
-                    inline: true,
-                };
-            })
-        );
 
-        msg.channel.send(embed);
+        // blue
+        // const lines: string[] = ['```ini'];
+        const lines: string[] = ['```diff'];
+
+        songsToShow.forEach((song, i) => {
+            const isCurrentSong = queue.currSong === i;
+
+            const maxLength = 50;
+            const requiredWhitespace = maxLength - song.title.length - song.length.length;
+
+            if (!isCurrentSong) {
+                lines.push(
+                    `  ${song.title}${Array(requiredWhitespace < 0 ? 0 : requiredWhitespace).join(' ')}${song.length}`
+                );
+                return;
+            }
+
+            const { streamTime, totalStreamTime } = queue.connection!.dispatcher;
+
+            const singleLine = [
+                '+ ',
+                song.title,
+                Array(requiredWhitespace < 0 ? 0 : requiredWhitespace).join(' '),
+
+                streamTime && totalStreamTime ? millisecondsToTimeStamp(totalStreamTime - streamTime) : song.length,
+                ' left',
+            ];
+
+            lines.push(singleLine.join(''));
+        });
+        lines.push('```');
+
+        msg.channel.send(lines.join('\n'));
     },
 });
