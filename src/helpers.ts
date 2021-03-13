@@ -40,8 +40,8 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
                 const combinedData = data.join('');
 
                 const urlSearchPattern = /"videoId"\s*:\s*"(.*?)"/i;
-                const titleSearchPattern = /"(title|text)"\s*:\s*"(.*?)"/i;
-                const videoLengthSearchPattern = /"simpletext"\s*?:\s*?"((\d+:)?\d+:\d+)"/i;
+                const titleSearchPattern = /"title":{"runs":\[{"text":"(.*?)"[,}]/i;
+                const videoLengthSearchPattern = /"simpletext"\s*:\s*"((\d+:)?\d+:\d+)"/i;
 
                 const vieoUrl = urlSearchPattern.exec(combinedData);
                 const videoTitle = titleSearchPattern.exec(combinedData);
@@ -53,7 +53,7 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
 
                 return void resolve({
                     url: `https://www.youtube.com/watch?v=${vieoUrl[1]}`,
-                    title: decodeURIComponent(JSON.parse(`"${videoTitle[2].replace('"', '\\"')}"`)),
+                    title: decodeURIComponent(JSON.parse(`"${videoTitle[1]}"`)),
                     length: videoLength[1],
                 });
             });
