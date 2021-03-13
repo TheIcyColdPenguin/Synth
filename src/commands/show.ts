@@ -1,5 +1,5 @@
-import { MessageEmbed } from 'discord.js';
 import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
+import { createEmbed } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'show',
@@ -17,7 +17,7 @@ export default as<OwnCommand>({
         }
 
         if (queue.songs.isEmpty()) {
-            return void msg.channel.send(new MessageEmbed().setTitle('The queue is currently empty'));
+            return void msg.channel.send(createEmbed('The queue is currently empty'));
         }
 
         const songsToShow = queue.songs
@@ -26,7 +26,7 @@ export default as<OwnCommand>({
                 queue.currSong - showQueueSize <= 0 ? 0 : queue.currSong - showQueueSize,
                 queue.currSong + showQueueSize
             );
-        const embed = new MessageEmbed().setTitle('Queue-').addFields(
+        const embed = createEmbed('Queue-').addFields(
             songsToShow.map(song => {
                 return {
                     name: song.title,

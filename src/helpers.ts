@@ -16,6 +16,14 @@ export const isUrl = (str: string) => {
     }
 };
 
+export const createEmbed = (title?: string) => {
+    const embed = new MessageEmbed().setColor('b4ded4');
+    if (title) {
+        embed.setTitle(title);
+    }
+    return embed;
+};
+
 export const getVideoDetails = (searchTerm: string): Promise<Song> => {
     return new Promise((resolve, reject) => {
         const searchQuery = encodeURIComponent(searchTerm);
@@ -104,7 +112,7 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
     const dispatcher = queue.connection.play(ytVideo, { type: 'opus' });
     dispatcher.setVolumeLogarithmic(1);
 
-    const embed = new MessageEmbed().setTitle(currSongObj.title).setColor('b4ded4').setDescription(currSongObj.url);
+    const embed = createEmbed(currSongObj.title).setDescription(currSongObj.url);
 
     msg.channel.send(embed);
 };

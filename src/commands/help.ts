@@ -1,6 +1,7 @@
 import { Message, MessageEmbed } from 'discord.js';
 import { OwnCommand, as } from '../constants';
 import { getCommands } from '../add-all-commands';
+import { createEmbed } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'help',
@@ -16,18 +17,15 @@ export default as<OwnCommand>({
         if (args.length === 0 || args[0].toLowerCase() == 'all') {
             // list all commands
 
-            const embed = new MessageEmbed()
-                .setColor('#b4ded4')
-                .setTitle('Help -')
-                .addFields(
-                    ...allCommands.map(command => [
-                        {
-                            name: command.name[0].toUpperCase() + command.name.slice(1),
-                            value: command.description,
-                            inline: true,
-                        },
-                    ])
-                );
+            const embed = createEmbed('Help -').addFields(
+                ...allCommands.map(command => [
+                    {
+                        name: command.name[0].toUpperCase() + command.name.slice(1),
+                        value: command.description,
+                        inline: true,
+                    },
+                ])
+            );
 
             msg.channel.send(embed);
         } else {
@@ -43,14 +41,12 @@ export default as<OwnCommand>({
                     continue;
                 }
 
-                const embed = new MessageEmbed()
-                    .setColor('#b4ded4')
-                    .addFields(
-                        { name: command.name[0].toUpperCase() + command.name.slice(1), value: command.description },
-                        { name: 'Usage', value: command.usage },
-                        { name: 'Cooldown', value: `${command.cooldown} seconds` },
-                        { name: 'Aliases', value: command.aliases.join(', ') }
-                    );
+                const embed = createEmbed().addFields(
+                    { name: command.name[0].toUpperCase() + command.name.slice(1), value: command.description },
+                    { name: 'Usage', value: command.usage },
+                    { name: 'Cooldown', value: `${command.cooldown} seconds` },
+                    { name: 'Aliases', value: command.aliases.join(', ') }
+                );
 
                 await msg.channel.send(embed);
             }

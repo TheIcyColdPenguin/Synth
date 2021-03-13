@@ -1,8 +1,7 @@
-import { MessageEmbed } from 'discord.js';
 import ytdl from 'ytdl-core';
 
 import { OwnCommand, as, assertQueueConstruct, Song } from '../constants';
-import { getVideoDetails, isUrl, playSong } from '../helpers';
+import { createEmbed, getVideoDetails, isUrl, playSong } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'play',
@@ -91,7 +90,7 @@ export default as<OwnCommand>({
                             );
                         }
                     } else {
-                        let embed = new MessageEmbed().setColor('$b4ded4').setTitle(`Added ${video.title} to queue!`);
+                        let embed = createEmbed(`Added ${video.title} to queue!`);
                         msg.channel.send(embed);
                     }
                 }

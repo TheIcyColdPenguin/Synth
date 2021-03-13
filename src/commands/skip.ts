@@ -1,6 +1,5 @@
-import { MessageEmbed } from 'discord.js';
 import { OwnCommand, as, assertQueueConstruct } from '../constants';
-import { hasOnlyDigits, playSong } from '../helpers';
+import { createEmbed, hasOnlyDigits, playSong } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'skip',
@@ -24,11 +23,7 @@ export default as<OwnCommand>({
             queue.connection.dispatcher.end();
             queue.currSong += 1;
 
-            const embed = new MessageEmbed()
-                .setColor('#b4ded4')
-                .setTitle(`Skipped song "${queue.songs.items[queue.currSong - 1].title}"`);
-
-            msg.channel.send(embed);
+            msg.channel.send(createEmbed(`Skipped song "${queue.songs.items[queue.currSong - 1].title}"`));
 
             if (queue.currSong !== queue.songs.size()) {
                 playSong(msg, queue);
