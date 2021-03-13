@@ -124,3 +124,11 @@ export const hasOnlyDigits = (str: string): number | false => {
 
     return /^\d+$/.test(str) && parseInt(str);
 };
+
+export const millisecondsToTimeStamp = (millis: number) => {
+    const totalSeconds = Math.round(millis / 1000);
+    console.log(totalSeconds);
+    const minutes = Math.floor(totalSeconds / 60).toString();
+    const seconds = (totalSeconds % 60).toString();
+    return `${minutes}:${(seconds.length < 2 ? '0' : '') + seconds}`;
+};
