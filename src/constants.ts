@@ -1,5 +1,7 @@
 import { Client, Collection, Message, VoiceConnection } from 'discord.js';
 
+export const showQueueSize = 4;
+
 export interface OwnCommand {
     name: string;
     description: string;
