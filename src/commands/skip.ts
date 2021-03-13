@@ -18,7 +18,7 @@ export default as<OwnCommand>({
             return;
         }
 
-        if (queue.connection) {
+        if (queue.connection?.dispatcher) {
             queue.playing = false;
             queue.connection.dispatcher.end();
             queue.currSong += 1;
