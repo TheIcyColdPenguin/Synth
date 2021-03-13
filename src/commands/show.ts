@@ -1,5 +1,6 @@
 import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
 import { createEmbed, millisecondsToTimeStamp } from '../helpers';
+import play from './play';
 
 export default as<OwnCommand>({
     name: 'show',
@@ -12,6 +13,10 @@ export default as<OwnCommand>({
     guildOnly: true,
 
     execute: async (msg, args, queue) => {
+        if (args.length !== 0) {
+            return void play.execute(msg, args, queue);
+        }
+
         if (!assertQueueConstruct(queue, msg)) {
             return;
         }
@@ -38,28 +43,14 @@ export default as<OwnCommand>({
         songsToShow.forEach((song, i) => {
             const isCurrentSong = queue.currSong === i;
 
-            const maxLength = 50;
+            const maxLength = 76;
             const requiredWhitespace = maxLength - song.title.length - song.length.length;
 
-            if (!isCurrentSong) {
-                lines.push(
-                    `  ${song.title}${Array(requiredWhitespace < 0 ? 0 : requiredWhitespace).join(' ')}${song.length}`
-                );
-                return;
-            }
-
-            const { streamTime, totalStreamTime } = queue.connection!.dispatcher;
-
-            const singleLine = [
-                '+ ',
-                song.title,
-                Array(requiredWhitespace < 0 ? 0 : requiredWhitespace).join(' '),
-
-                streamTime && totalStreamTime ? millisecondsToTimeStamp(totalStreamTime - streamTime) : song.length,
-                ' left',
-            ];
-
-            lines.push(singleLine.join(''));
+            lines.push(
+                `${isCurrentSong ? '+' : ' '} ${song.title}${Array(
+                    requiredWhitespace < 0 ? 0 : requiredWhitespace
+                ).join(' ')}${song.length}`
+            );
         });
         lines.push('```');
 
