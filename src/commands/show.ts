@@ -4,8 +4,8 @@ import { createEmbed, millisecondsToTimeStamp } from '../helpers';
 export default as<OwnCommand>({
     name: 'show',
     aliases: ['q', 'queue', 'display'],
-    description: 'skips the current song in the queue',
-    usage: 'skip',
+    description: 'Displays the current queue',
+    usage: 'show',
 
     cooldown: 3,
     voice: true,
