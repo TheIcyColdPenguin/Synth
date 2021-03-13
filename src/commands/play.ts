@@ -29,14 +29,16 @@ export default as<OwnCommand>({
             return void msg.channel.send('Something went wrong with the voice channel. Please contact the bot author');
         }
 
-        if (newArgs.length === 0 && !queue.playing) {
-            if (!queue.songs.isEmpty() && queue.songs.size() !== queue.currSong) {
-                // start playing songs
-                playSong(msg, queue);
-            } else if (queue.songs.isEmpty() || queue.songs.size() === queue.currSong) {
-                msg.channel.send('Please add songs to the queue to play!');
+        if (newArgs.length === 0) {
+            if (!queue.playing || queue.connection?.dispatcher.paused) {
+                if (!queue.songs.isEmpty() && queue.songs.size() !== queue.currSong) {
+                    // start playing songs
+                    playSong(msg, queue);
+                } else if (queue.songs.isEmpty() || queue.songs.size() === queue.currSong) {
+                    msg.channel.send('Please add songs to the queue to play!');
+                }
+                return;
             }
-            return;
         }
 
         if (queue.songs.size() > 5000) {
