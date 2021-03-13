@@ -64,12 +64,6 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
 };
 
 const onFinish = (msg: Message, queue: QueueConstruct) => {
-    console.log('ran from onFinish');
-    console.log('\n\nQUEUE\n\n', queue.currSong);
-    console.log(queue.playing);
-    console.log(queue.currSong);
-    console.log(queue.songs);
-
     queue.currSong += 1;
     queue.playing = false;
 
@@ -79,6 +73,16 @@ const onFinish = (msg: Message, queue: QueueConstruct) => {
 };
 
 export const playSong = async (msg: Message, queue: QueueConstruct) => {
+    if (!queue.connection) {
+        return void msg.channel.send('Error: Disconnected from voice channel');
+    }
+
+    if (queue.connection.dispatcher?.paused) {
+        queue.connection.dispatcher.resume();
+        msg.react('➡️');
+        return;
+    }
+
     if (queue.playing) {
         return;
     }
@@ -86,10 +90,6 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
     if (queue.currSong >= queue.songs.size() || queue.songs.isEmpty()) {
         queue.currSong = queue.songs.size();
         return;
-    }
-
-    if (!queue.connection) {
-        return void msg.channel.send('Error: Disconnected from voice channel');
     }
 
     const currSongObj = queue.songs.items[queue.currSong];
@@ -127,7 +127,6 @@ export const hasOnlyDigits = (str: string): number | false => {
 
 export const millisecondsToTimeStamp = (millis: number) => {
     const totalSeconds = Math.round(millis / 1000);
-    console.log(totalSeconds);
     const minutes = Math.floor(totalSeconds / 60).toString();
     const seconds = (totalSeconds % 60).toString();
     return `${minutes}:${(seconds.length < 2 ? '0' : '') + seconds}`;
