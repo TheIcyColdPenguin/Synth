@@ -5,7 +5,7 @@
     "main": "build/index.js",
     "scripts": {
         "dev": "nodemon",
-        "build":"tsc",
+        "build": "tsc",
         "start": "node ."
     },
     "author": "TheIcyColdPenguin",
@@ -14,7 +14,6 @@
         "discord.js": "^12.5.1",
         "node-cleanup": "^2.1.2",
         "node-opus": "^0.3.3",
-        "puppeteer": "^8.0.0",
         "ytdl-core": "^4.5.0",
         "ytdl-core-discord": "^1.2.5"
     },
