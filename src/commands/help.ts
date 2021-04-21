@@ -11,7 +11,7 @@ export default as<OwnCommand>({
 
     cooldown: 3,
 
-    execute: async (msg: Message, args: string[]) => {
+    execute: async (msg, args) => {
         const allCommands = getCommands();
 
         if (args.length === 0 || args[0].toLowerCase() == 'all') {
@@ -43,9 +43,9 @@ export default as<OwnCommand>({
 
                 const embed = createEmbed().addFields(
                     { name: command.name[0].toUpperCase() + command.name.slice(1), value: command.description },
-                    { name: 'Usage', value: command.usage },
-                    { name: 'Cooldown', value: `${command.cooldown} seconds` },
-                    { name: 'Aliases', value: command.aliases.join(', ') }
+                    { name: 'Usage', value: `\`${command.usage}\`` },
+                    { name: 'Cooldown', value: `\`${command.cooldown}\` seconds` },
+                    { name: 'Aliases', value: `\`${command.aliases.join(', ')}\`` }
                 );
 
                 await msg.channel.send(embed);
