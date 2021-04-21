@@ -1,5 +1,5 @@
 import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
-import { createEmbed, millisecondsToTimeStamp } from '../helpers';
+import { createEmbed } from '../helpers';
 import play from './play';
 
 export default as<OwnCommand>({
@@ -12,7 +12,7 @@ export default as<OwnCommand>({
     voice: true,
     guildOnly: true,
 
-    execute: async (msg, args, queue) => {
+    execute: (msg, args, queue) => {
         if (args.length !== 0) {
             return void play.execute(msg, args, queue);
         }

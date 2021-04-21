@@ -13,7 +13,7 @@ export default as<OwnCommand>({
     voice: true,
     guildOnly: true,
 
-    execute: async (msg, args, queue) => {
+    execute: (msg, args, queue) => {
         if (!assertQueueConstruct(queue, msg)) {
             return;
         }
@@ -22,8 +22,6 @@ export default as<OwnCommand>({
             queue.playing = false;
             queue.connection.dispatcher.end();
             queue.currSong += 1;
-
-            msg.channel.send(createEmbed(`Skipped song "${queue.songs.items[queue.currSong - 1].title}"`));
 
             if (queue.currSong !== queue.songs.size()) {
                 playSong(msg, queue);

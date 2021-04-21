@@ -1,5 +1,4 @@
-import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
-import { createEmbed, millisecondsToTimeStamp } from '../helpers';
+import { OwnCommand, as, assertQueueConstruct } from '../constants';
 
 export default as<OwnCommand>({
     name: 'pause',
@@ -11,7 +10,7 @@ export default as<OwnCommand>({
     voice: true,
     guildOnly: true,
 
-    execute: async (msg, args, queue) => {
+    execute: (msg, args, queue) => {
         if (!assertQueueConstruct(queue, msg)) {
             return;
         }
