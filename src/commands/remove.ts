@@ -1,4 +1,4 @@
-import { OwnCommand, as, assertQueueConstruct } from '../constants';
+import { OwnCommand, as, assertQueueConstruct, SongQueue, Song } from '../constants';
 import { createEmbed } from '../helpers';
 import skip from './skip';
 
@@ -6,7 +6,7 @@ export default as<OwnCommand>({
     name: 'remove',
     aliases: ['rm', 'delete', 'd'],
     description: 'Removes the given song from the queue',
-    usage: 'remove <song name>',
+    usage: 'remove <song name | "all">',
 
     cooldown: 3,
     args: true,
@@ -22,18 +22,29 @@ export default as<OwnCommand>({
 
         let songToRemoveIndex = parseInt(userInput) - 1;
         if (isNaN(songToRemoveIndex)) {
+            // check if argument is "all"
+            if (userInput === 'all') {
+                if (queue.connection?.dispatcher) {
+                    queue.connection.dispatcher.end();
+                    queue.playing = false;
+                    queue.currSong = 0;
+                    queue.songs = new SongQueue<Song>();
+
+                    return void msg.channel.send('Cleared queue');
+                }
+            }
+
             songToRemoveIndex = queue.songs
                 .getFUllQueue()
                 .findIndex(song => song.title.replace(/\W/g, '').toLowerCase().includes(userInput));
-                if (songToRemoveIndex === -1) {
-                    return void msg.channel.send('No songs found');
-                }
-        }else{
-            if (songToRemoveIndex<0 || songToRemoveIndex>=queue.songs.size()){
-                return void msg.channel.send('No song at that position')
+            if (songToRemoveIndex === -1) {
+                return void msg.channel.send('No songs found');
+            }
+        } else {
+            if (songToRemoveIndex < 0 || songToRemoveIndex >= queue.songs.size()) {
+                return void msg.channel.send('No song at that position');
             }
         }
-
 
         if (queue.currSong > songToRemoveIndex) {
             // song to be removed is already over
