@@ -29,7 +29,7 @@ client.on('message', msg => {
     const commandName = args.shift()?.toLowerCase() || '';
 
     if (!client.commands) {
-        return void msg.channel.send('We\re having difficulties getting commands right now. Please try again later');
+        return void msg.channel.send('We\'re having difficulties getting commands right now. Please try again later');
     }
 
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases.includes(commandName));
