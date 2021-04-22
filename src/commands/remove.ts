@@ -19,13 +19,21 @@ export default as<OwnCommand>({
         }
 
         const userInput = args.join('').toLowerCase();
-        const songToRemoveIndex = queue.songs
-            .getFUllQueue()
-            .findIndex(song => song.title.replace(/\W/g, '').toLowerCase().includes(userInput));
 
-        if (songToRemoveIndex === -1) {
-            return void msg.channel.send('No songs found');
+        let songToRemoveIndex = parseInt(userInput) - 1;
+        if (isNaN(songToRemoveIndex)) {
+            songToRemoveIndex = queue.songs
+                .getFUllQueue()
+                .findIndex(song => song.title.replace(/\W/g, '').toLowerCase().includes(userInput));
+                if (songToRemoveIndex === -1) {
+                    return void msg.channel.send('No songs found');
+                }
+        }else{
+            if (songToRemoveIndex<0 || songToRemoveIndex>=queue.songs.size()){
+                return void msg.channel.send('No song at that position')
+            }
         }
+
 
         if (queue.currSong > songToRemoveIndex) {
             // song to be removed is already over
