@@ -1,4 +1,5 @@
 import { Client, Collection, Message, VoiceConnection } from 'discord.js';
+import { Readable } from 'stream';
 
 export const showQueueSize = 4;
 
@@ -26,6 +27,7 @@ export interface QueueConstruct {
     songs: SongQueue<Song>;
     playing: boolean;
     currSong: number;
+    currSongObj?: Readable;
     connection: VoiceConnection | null;
 }
 
