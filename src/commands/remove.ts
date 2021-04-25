@@ -35,8 +35,10 @@ export default as<OwnCommand>({
             }
 
             songToRemoveIndex = queue.songs
-                .getFUllQueue()
-                .findIndex(song => song.title.replace(/\W/g, '').toLowerCase().includes(userInput));
+                .getFullQueue()
+                .findIndex(song =>
+                    song.title.replace(/\W/g, '').toLowerCase().includes(userInput.replace(/\W/g, '').toLowerCase())
+                );
             if (songToRemoveIndex === -1) {
                 return void msg.channel.send('No songs found');
             }

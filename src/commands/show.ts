@@ -30,7 +30,7 @@ export default as<OwnCommand>({
         }
 
         const songsToShow = queue.songs
-            .getFUllQueue()
+            .getFullQueue()
             .slice(
                 queue.currSong - showQueueSize <= 0 ? 0 : queue.currSong - showQueueSize,
                 queue.currSong + showQueueSize

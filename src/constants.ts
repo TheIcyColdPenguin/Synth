@@ -71,7 +71,7 @@ export class SongQueue<T> {
         return this.items[0];
     }
 
-    getFUllQueue() {
+    getFullQueue() {
         return [...this.items];
     }
 
