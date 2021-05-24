@@ -24,7 +24,7 @@ export default as<OwnCommand>({
 
         if (queue.playing) {
             queue.connection.dispatcher.pause(true);
-
+            queue.playing = false
             msg.react('🛑');
         }
     },
