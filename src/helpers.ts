@@ -1,5 +1,5 @@
 import { Message, MessageEmbed } from 'discord.js';
-import ytdl from 'ytdl-core';
+import ytdl from 'ytdl-core-discord';
 import https from 'https';
 import { QueueConstruct, Song } from './constants';
 
@@ -66,14 +66,13 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
 const onFinish = (msg: Message, queue: QueueConstruct) => {
     queue.currSong += 1;
     queue.playing = false;
-    queue.currSongObj = undefined;
 
     if (queue.songs.size() >= queue.currSong) {
         playSong(msg, queue);
     }
 };
 
-export const playSong = async (msg: Message, queue: QueueConstruct, seek?: number) => {
+export const playSong = async (msg: Message, queue: QueueConstruct) => {
     if (!queue.connection) {
         return void msg.channel.send('Error: Disconnected from voice channel');
     }
@@ -99,10 +98,7 @@ export const playSong = async (msg: Message, queue: QueueConstruct, seek?: numbe
 
     let ytVideo;
     try {
-        ytVideo = ytdl(currSongObj.url, {
-            filter: 'audioonly',
-            quality: 'highestaudio',
-        })
+        ytVideo = (await ytdl(currSongObj.url, { quality: 'highestaudio' }))
             .on('finish', () => onFinish(msg, queue))
             .on('error', e => {
                 console.log('Something went wrong ', e);
@@ -113,17 +109,10 @@ export const playSong = async (msg: Message, queue: QueueConstruct, seek?: numbe
         return void msg.channel.send('Something went wrong playing the song.');
     }
 
-    const dispatcher = queue.connection.play(ytVideo, seek ? { seek } : undefined);
-    // add stream to queue obj
-    queue.currSongObj = ytVideo;
+    const dispatcher = queue.connection.play(ytVideo, { type: 'opus' });
     dispatcher.setVolumeLogarithmic(1);
 
-    let embed;
-    if (seek) {
-        embed = createEmbed(currSongObj.title).setDescription(`Seek to ${seek} second(s)`);
-    } else {
-        embed = createEmbed(currSongObj.title).setDescription(currSongObj.url);
-    }
+    const embed = createEmbed(currSongObj.title).setDescription(currSongObj.url);
     msg.channel.send(embed);
 };
 
