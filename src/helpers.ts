@@ -2,7 +2,6 @@ import { Message, MessageEmbed } from 'discord.js';
 import ytdl from 'ytdl-core-discord';
 import https from 'https';
 import { QueueConstruct, Song } from './constants';
-
 const YT_SEARCH_URL = 'https://www.youtube.com/results?search_query=';
 
 export const isUrl = (str: string) => {
