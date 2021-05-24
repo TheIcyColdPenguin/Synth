@@ -80,7 +80,7 @@ export default as<OwnCommand>({
                 {
                     queue.songs.add(video);
 
-                    if (!queue.playing) {
+                    if (!queue.playing && queue.currSong === queue.songs.getFullQueue().length-1) {
                         // start playing song
                         try {
                             queue.connection = await voiceChannel.join();
