@@ -4,9 +4,7 @@ import { createEmbed, hasOnlyDigits, playSong } from '../helpers';
 export default as<OwnCommand>({
     name: 'skip',
     aliases: ['n', 'next'],
-    // description: 'skips any number of songs in the queue',
-    // usage: 'skip [all | <number of songs to skip>]',
-    description: 'skips the current song in the queue',
+    description: 'Skips the current song in the queue',
     usage: 'skip',
 
     cooldown: 3,
@@ -28,18 +26,5 @@ export default as<OwnCommand>({
             }
         }
 
-        // TODO: add a way to skip multiple songs
-
-        // let numToSkip = hasOnlyDigits(args[0] || '');
-
-        // if (numToSkip === false) {
-        //     numToSkip = 1;
-        // }
-
-        // if (args[0] && args[0].toLowerCase() == 'all') {
-        //     numToSkip = queue.songs.size() - queue.currSong;
-        // }
-
-        // list all commands
     },
 });
