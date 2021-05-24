@@ -79,6 +79,8 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
 
     if (queue.connection.dispatcher?.paused) {
         queue.connection.dispatcher.resume();
+        queue.connection.dispatcher.pause();
+        queue.connection.dispatcher.resume();
         queue.playing = true;
         msg.react('➡️');
         return;
