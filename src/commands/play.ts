@@ -5,7 +5,7 @@ import { createEmbed, getVideoDetails, isUrl, playSong } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'play',
-    aliases: ['p', 'a', 'append', 'add'],
+    aliases: ['p', 'resume', 'a', 'append', 'add'],
     description: 'Play a song/playlist or add to the queue if a song is currently playing',
     usage: 'play [song/playlist search term or url]',
 
