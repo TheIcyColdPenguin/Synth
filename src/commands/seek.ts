@@ -36,6 +36,7 @@ export default as<OwnCommand>({
 
         queue.connection.dispatcher.end();
         queue.playing = false;
+        queue.lastUsersListeningCheck = Date.now();
         playSong(msg, queue, absoluteTimeStamp);
     },
 });

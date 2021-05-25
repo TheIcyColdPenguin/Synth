@@ -27,6 +27,7 @@ export default as<OwnCommand>({
                 if (queue.connection?.dispatcher) {
                     queue.connection.dispatcher.end();
                     queue.playing = false;
+                    queue.lastUsersListeningCheck = Date.now();
                     queue.currSong = 0;
                     queue.songs = new SongQueue<Song>();
 

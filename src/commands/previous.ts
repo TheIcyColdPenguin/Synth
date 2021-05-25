@@ -22,9 +22,10 @@ export default as<OwnCommand>({
 
         queue.connection.dispatcher.end();
         queue.playing = false;
+        queue.lastUsersListeningCheck = Date.now();
         if (queue.currSong !== 0) {
             queue.currSong--;
         }
-        playSong(msg, queue)
+        playSong(msg, queue);
     },
 });

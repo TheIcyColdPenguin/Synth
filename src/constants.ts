@@ -26,6 +26,7 @@ export interface QueueConstruct {
     songs: SongQueue<Song>;
     playing: boolean;
     currSong: number;
+    lastUsersListeningCheck: number;
     connection: VoiceConnection | null;
 }
 
@@ -34,6 +35,7 @@ export const createQueue = (): QueueConstruct => {
         songs: new SongQueue<Song>(),
         playing: false,
         currSong: 0,
+        lastUsersListeningCheck: Date.now(),
         connection: null,
     };
 };

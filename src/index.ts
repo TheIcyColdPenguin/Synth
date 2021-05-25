@@ -29,7 +29,7 @@ client.on('message', msg => {
     const commandName = args.shift()?.toLowerCase() || '';
 
     if (!client.commands) {
-        return void msg.channel.send('We\'re having difficulties getting commands right now. Please try again later');
+        return void msg.channel.send("We're having difficulties getting commands right now. Please try again later");
     }
 
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases.includes(commandName));
@@ -136,5 +136,21 @@ client.on('message', msg => {
         msg.channel.send('Something went wrong. Please try again later');
     }
 });
+
+setInterval(() => {
+    const now = Date.now();
+    const timeoutTime = 1000 * 60;
+    for (const queue of queues.array()) {
+        if (queue.connection?.channel.members.size !== 1) {
+            return;
+        }
+
+        if (now - queue.lastUsersListeningCheck > timeoutTime) {
+            queue.connection.dispatcher.end();
+            queue.connection.channel.leave();
+            queue.playing = false;
+        }
+    }
+}, 5000);
 
 client.login(token);

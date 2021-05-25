@@ -18,6 +18,7 @@ export default as<OwnCommand>({
 
         if (queue.connection?.dispatcher) {
             queue.playing = false;
+            queue.lastUsersListeningCheck = Date.now();
             queue.connection.dispatcher.end();
             queue.currSong += 1;
 
@@ -25,6 +26,5 @@ export default as<OwnCommand>({
                 playSong(msg, queue);
             }
         }
-
     },
 });

@@ -24,7 +24,8 @@ export default as<OwnCommand>({
 
         if (queue.playing) {
             queue.connection.dispatcher.pause();
-            queue.playing = false
+            queue.playing = false;
+            queue.lastUsersListeningCheck = Date.now();
             msg.react('🛑');
         }
     },

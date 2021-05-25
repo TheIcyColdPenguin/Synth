@@ -30,9 +30,10 @@ export default as<OwnCommand>({
         }
 
         if (newArgs.length === 0) {
-            if (!queue.playing || queue.connection?.dispatcher.paused) {
+            if (!queue.playing || queue.connection?.dispatcher?.paused) {
                 if (!queue.songs.isEmpty() && queue.songs.size() !== queue.currSong) {
                     // start playing songs
+                    queue.lastUsersListeningCheck = Date.now();
                     playSong(msg, queue);
                 } else if (queue.songs.isEmpty() || queue.songs.size() === queue.currSong) {
                     msg.channel.send('Please add songs to the queue to play!');
@@ -80,10 +81,11 @@ export default as<OwnCommand>({
                 {
                     queue.songs.add(video);
 
-                    if (!queue.playing && queue.currSong === queue.songs.getFullQueue().length-1) {
+                    if (!queue.playing && queue.currSong === queue.songs.getFullQueue().length - 1) {
                         // start playing song
                         try {
                             queue.connection = await voiceChannel.join();
+
                             playSong(msg, queue);
                         } catch (e) {
                             console.log(e);
@@ -95,6 +97,7 @@ export default as<OwnCommand>({
                         let embed = createEmbed(`Added ${video.title} to queue!`);
                         msg.channel.send(embed);
                     }
+                    queue.lastUsersListeningCheck = Date.now();
                 }
             }
         }
