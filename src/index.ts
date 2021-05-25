@@ -139,7 +139,7 @@ client.on('message', msg => {
 
 setInterval(() => {
     const now = Date.now();
-    const timeoutTime = 1000 * 60;
+    const timeoutTime = 1000 * 60 * 5;
     for (const queue of queues.array()) {
         if (queue.connection?.channel.members.size !== 1) {
             return;
