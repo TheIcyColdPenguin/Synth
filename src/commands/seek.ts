@@ -34,7 +34,7 @@ export default as<OwnCommand>({
             absoluteTimeStamp += Math.floor(queue.connection.dispatcher.streamTime / 1000);
         }
 
-        queue.connection.dispatcher.end();
+        queue.connection.dispatcher?.end();
         queue.playing = false;
         queue.lastUsersListeningCheck = Date.now();
         playSong(msg, queue, absoluteTimeStamp);

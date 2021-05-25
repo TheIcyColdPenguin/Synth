@@ -25,7 +25,7 @@ export default as<OwnCommand>({
             // check if argument is "all"
             if (userInput === 'all') {
                 if (queue.connection?.dispatcher) {
-                    queue.connection.dispatcher.end();
+                    queue.connection.dispatcher?.end();
                     queue.playing = false;
                     queue.lastUsersListeningCheck = Date.now();
                     queue.currSong = 0;

@@ -19,7 +19,7 @@ export default as<OwnCommand>({
         if (queue.connection?.dispatcher) {
             queue.playing = false;
             queue.lastUsersListeningCheck = Date.now();
-            queue.connection.dispatcher.end();
+            queue.connection.dispatcher?.end();
             queue.currSong += 1;
 
             if (queue.currSong !== queue.songs.size()) {

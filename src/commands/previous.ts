@@ -20,7 +20,7 @@ export default as<OwnCommand>({
             return void msg.channel.send('Something went wrong talking to the voice channel');
         }
 
-        queue.connection.dispatcher.end();
+        queue.connection.dispatcher?.end();
         queue.playing = false;
         queue.lastUsersListeningCheck = Date.now();
         if (queue.currSong !== 0) {

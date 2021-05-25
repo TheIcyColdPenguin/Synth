@@ -146,7 +146,7 @@ setInterval(() => {
         }
 
         if (now - queue.lastUsersListeningCheck > timeoutTime) {
-            queue.connection.dispatcher.end();
+            queue.connection.dispatcher?.end();
             queue.connection.channel.leave();
             queue.playing = false;
         }
