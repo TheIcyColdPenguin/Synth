@@ -151,6 +151,6 @@ setInterval(() => {
             queue.playing = false;
         }
     }
-}, 5000);
+}, 1000* 60);
 
 client.login(token);
