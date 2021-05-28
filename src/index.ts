@@ -1,7 +1,7 @@
 import { Client, Collection, User } from 'discord.js';
 
 import { token, prefix } from './config.json';
-import { CommandClient, QueueConstruct, createQueue } from './constants';
+import { CommandClient, QueueConstruct, createQueue, SongQueue, Song } from './constants';
 
 // actual bot
 
@@ -148,9 +148,11 @@ setInterval(() => {
         if (now - queue.lastUsersListeningCheck > timeoutTime) {
             queue.connection.dispatcher?.end();
             queue.connection.channel.leave();
+            queue.connection.disconnect();
             queue.playing = false;
+            queue.songs = new SongQueue<Song>();
         }
     }
-}, 1000* 60);
+}, 1000 * 60);
 
 client.login(token);
