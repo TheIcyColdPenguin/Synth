@@ -1,7 +1,8 @@
 import ytdl from 'ytdl-core';
+import ytpl from 'ytpl';
 
 import { OwnCommand, as, assertQueueConstruct, Song } from '../constants';
-import { createEmbed, getVideoDetails, isUrl, playSong } from '../helpers';
+import { createEmbed, getVideoDetails, isUrl, millisecondsToTimeStamp, playSong } from '../helpers';
 
 export default as<OwnCommand>({
     name: 'play',
@@ -29,6 +30,7 @@ export default as<OwnCommand>({
             return void msg.channel.send('Something went wrong with the voice channel. Please contact the bot author');
         }
 
+        // no arguments were given, so just play the song if possible
         if (newArgs.length === 0) {
             if (!queue.playing || queue.connection?.dispatcher?.paused) {
                 if (!queue.songs.isEmpty() && queue.songs.size() !== queue.currSong) {
@@ -49,9 +51,17 @@ export default as<OwnCommand>({
         for (let i = 0; i < newArgs.length; i++) {
             const arg = newArgs[i];
 
+            // if it's a url
+            // if it's not a youtube url, return early
+            // check if it's a playlist in which case add it to the queue
+            // if it's a video, add to queue
             if (isUrl(arg)) {
                 try {
-                    const isYT = /((https?):\/\/)?www.youtube.com/i;
+                    const isYT = /((https?):\/\/)?(www\.)?youtube\.com/i;
+
+                    const isVideoRegex = /v=([a-zA-Z_\-]{8,})/;
+                    const isPlaylistRegex = /list=([a-zA-Z0-9_\-]{8,})/;
+                    // INFO: minimum of 8 characters is arbitrary
 
                     if (!isYT.test(arg)) {
                         return void msg.channel.send(
@@ -59,12 +69,43 @@ export default as<OwnCommand>({
                         );
                     }
 
+                    const isPlaylist = arg.match(isPlaylistRegex);
+                    if (isPlaylist) {
+                        const playlistDetails = await ytpl(isPlaylist[1]);
+
+                        playlistDetails.items.forEach(async (video, i) => {
+                            const eachPlaylistVideodetails = await ytdl.getInfo(video.shortUrl);
+
+                            if (!video.duration || !video.durationSec) {
+                                return void msg.channel.send(
+                                    `The video ${video.title} from the given playlist was not found, skipping...`
+                                );
+                            }
+
+                            queue.songs.add({
+                                title: eachPlaylistVideodetails.videoDetails.title,
+                                url: video.shortUrl,
+                                length: video.duration || millisecondsToTimeStamp(video.durationSec * 1000),
+                            });
+
+                            if (!queue.playing && i === 0) {
+                                if (!queue.connection?.dispatcher) {
+                                    queue.connection = await voiceChannel.join();
+                                    playSong(msg, queue);
+                                }
+                            }
+                        });
+                        const embed = createEmbed(`Added playlist ${playlistDetails.title}`);
+                        return void msg.channel.send(embed);
+                    }
+
                     const details = await ytdl.getInfo(arg);
 
                     return void msg.channel.send(
                         `Name: ${details.videoDetails.title}\n ${details.videoDetails.video_url}`
                     );
-                } catch {
+                } catch (e) {
+                    console.log(e);
                     return void msg.channel.send(`${arg} - something went wrong`);
                 }
             } else {
