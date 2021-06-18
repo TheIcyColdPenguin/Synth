@@ -44,20 +44,26 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
                 const videoLengthSearchPattern = /"simpletext"\s*:\s*"((\d+:)?\d+:\d+)"/i;
                 const videoThumbnailSearchPattern = /"thumbnail"\s*:\s*\{"thumbnails"\s*:\s*\[\{"url"\s*:\s*"(.*?)"/i;
 
-                const vieoUrl = urlSearchPattern.exec(combinedData);
+                const videoUrl = urlSearchPattern.exec(combinedData);
                 const videoTitle = titleSearchPattern.exec(combinedData);
                 const videoLength = videoLengthSearchPattern.exec(combinedData);
                 const videoThumbnail = videoThumbnailSearchPattern.exec(combinedData);
 
-                if (!(vieoUrl && videoTitle && videoLength && videoThumbnail)) {
+                if (!(videoUrl && videoTitle && videoLength && videoThumbnail)) {
                     return void reject('The requested video was not found');
                 }
+                // TODO: use a fallback image if the right one is missing
+                // let thumbnailUrl = videoThumbnail[1];
+                // if (videoThumbnail[1].startsWith('/')) {
+                //     thumbnailUrl = 'https://www.gstatic.com/youtube/img/branding/youtubelogo/svg/youtubelogo.svg';
+                // }
 
                 return void resolve({
-                    url: `https://www.youtube.com/watch?v=${vieoUrl[1]}`,
+                    url: `https://www.youtube.com/watch?v=${videoUrl[1]}`,
                     title: decodeURIComponent(JSON.parse(`"${videoTitle[1]}"`)),
                     length: videoLength[1],
                     thumbnail: videoThumbnail[1],
+                    // thumbnail: thumbnailUrl,
                 });
             });
 
