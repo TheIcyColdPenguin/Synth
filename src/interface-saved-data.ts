@@ -29,9 +29,9 @@ class UserData {
         this.userData = userdata;
     }
 
-    getPlaylist(userId: string, playlistName: string) {
+    getPlaylist(userId: string, playlistName: string): FullPlaylistData | null {
         playlistName = playlistName.toLowerCase();
-        return this.userData[userId]?.[playlistName];
+        return this.userData[userId]?.[playlistName] || null;
     }
 
     getAllPlaylists(userId: string): PlaylistData[] | null {
@@ -60,8 +60,8 @@ class UserData {
 
         this.saveQueue(
             msg,
-            `Updated playlist ${playlistName}`,
-            'Could not save changes to playlist. The changes have been applied but if the bot ever restarts, this change will not be preserved.'
+            `Deleted playlist ${playlistName}`,
+            'Could not save changes to playlist. The correct changes have been applied temporarily but if the bot ever restarts, this change will not be preserved.'
         );
     }
 
@@ -82,7 +82,7 @@ class UserData {
             this.userData[userId] = {};
         }
 
-        if (Object.keys(this.userData[userId]).length >= 10) {
+        if (Object.keys(this.userData[userId]).length >= 10 && !this.userData[userId][playlistName]) {
             if (msg) {
                 msg.channel.send(createEmbed('You have reached the limit of 10 saved playlists').setColor('#cc6962'));
             }
