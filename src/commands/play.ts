@@ -48,9 +48,7 @@ export default as<OwnCommand>({
             return void msg.channel.send('You have reached the max queue size!');
         }
 
-        for (let i = 0; i < newArgs.length; i++) {
-            const arg = newArgs[i];
-
+        for (const arg of newArgs) {
             // if it's a url
             // if it's not a youtube url, return early
             // check if it's a playlist in which case add it to the queue
