@@ -18,9 +18,11 @@ export default as<OwnCommand>({
         }
 
         if (queue.playing) {
-            queue.connection?.dispatcher.end();
+            queue.connection?.dispatcher?.end();
         }
         queue.playing = false;
+        queue.currSong = 0;
+        queue.lastUsersListeningCheck = Date.now();
         queue.connection?.dispatcher.end();
         queue.connection?.disconnect();
         queue.connection?.channel.leave();
