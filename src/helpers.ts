@@ -124,7 +124,7 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
     const dispatcher = queue.connection.play(ytVideo, { type: 'opus' });
     dispatcher.setVolumeLogarithmic(1);
 
-    const embed = createEmbed(currSongObj.title).setDescription(currSongObj.url);
+    const embed = createEmbed(currSongObj.title).setDescription('Now playing').setURL(currSongObj.url);
 
     if (currSongObj.thumbnail) {
         embed.setImage(currSongObj.thumbnail);
