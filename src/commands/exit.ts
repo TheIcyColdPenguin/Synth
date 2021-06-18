@@ -2,7 +2,7 @@ import { OwnCommand, as, assertQueueConstruct, SongQueue, Song } from '../consta
 
 export default as<OwnCommand>({
     name: 'exit',
-    aliases: ['x'],
+    aliases: ['x', 'leave'],
     description: 'exit voice channel',
     usage: 'exit',
 
