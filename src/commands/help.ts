@@ -22,7 +22,7 @@ export default as<OwnCommand>({
                     {
                         name: command.name[0].toUpperCase() + command.name.slice(1),
                         value: command.description,
-                        inline: true,
+                        inline: false,
                     },
                 ])
             );
