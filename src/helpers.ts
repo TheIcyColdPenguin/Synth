@@ -42,12 +42,14 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
                 const urlSearchPattern = /"videoId"\s*:\s*"(.*?)"/i;
                 const titleSearchPattern = /"title":{"runs":\[{"text":"(.*?)"[,}]/i;
                 const videoLengthSearchPattern = /"simpletext"\s*:\s*"((\d+:)?\d+:\d+)"/i;
+                const videoThumbnailSearchPattern = /"thumbnail"\s*:\s*\{"thumbnails"\s*:\s*\[\{"url"\s*:\s*"(.*?)"/i;
 
                 const vieoUrl = urlSearchPattern.exec(combinedData);
                 const videoTitle = titleSearchPattern.exec(combinedData);
                 const videoLength = videoLengthSearchPattern.exec(combinedData);
+                const videoThumbnail = videoThumbnailSearchPattern.exec(combinedData);
 
-                if (!vieoUrl || !videoTitle || !videoLength) {
+                if (!(vieoUrl && videoTitle && videoLength && videoThumbnail)) {
                     return void reject('The requested video was not found');
                 }
 
@@ -55,6 +57,7 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
                     url: `https://www.youtube.com/watch?v=${vieoUrl[1]}`,
                     title: decodeURIComponent(JSON.parse(`"${videoTitle[1]}"`)),
                     length: videoLength[1],
+                    thumbnail: videoThumbnail[1],
                 });
             });
 
@@ -116,6 +119,11 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
     dispatcher.setVolumeLogarithmic(1);
 
     const embed = createEmbed(currSongObj.title).setDescription(currSongObj.url);
+
+    if (currSongObj.thumbnail) {
+        embed.setImage(currSongObj.thumbnail);
+    }
+
     msg.channel.send(embed);
 };
 

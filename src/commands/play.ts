@@ -84,6 +84,7 @@ export default as<OwnCommand>({
                                 title: eachPlaylistVideodetails.videoDetails.title,
                                 url: video.shortUrl,
                                 length: video.duration || millisecondsToTimeStamp(video.durationSec * 1000),
+                                thumbnail: video.bestThumbnail.url || '',
                             });
 
                             if (!queue.playing && i === 0) {
@@ -134,6 +135,10 @@ export default as<OwnCommand>({
                         }
                     } else {
                         let embed = createEmbed(`Added ${video.title} to queue!`);
+
+                        if (video.thumbnail) {
+                            embed.setThumbnail(video.thumbnail);
+                        }
                         msg.channel.send(embed);
                     }
                     queue.lastUsersListeningCheck = Date.now();

@@ -20,7 +20,7 @@ export interface CommandClient extends Client {
 
 export const as = <T>(value: T) => value;
 
-export type Song = { title: string; url: string; length: string };
+export type Song = { title: string; url: string; length: string; thumbnail: string };
 
 export interface QueueConstruct {
     songs: SongQueue<Song>;
