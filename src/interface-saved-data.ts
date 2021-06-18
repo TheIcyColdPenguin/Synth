@@ -82,6 +82,13 @@ class UserData {
             this.userData[userId] = {};
         }
 
+        if (Object.keys(this.userData[userId]).length >= 10) {
+            if (msg) {
+                msg.channel.send(createEmbed('You have reached the limit of 10 saved playlists').setColor('#cc6962'));
+            }
+            return;
+        }
+
         this.userData[userId][playlistName.toLowerCase()] = {
             name: playlistName,
             songs: playlist,
