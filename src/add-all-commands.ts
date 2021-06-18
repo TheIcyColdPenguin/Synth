@@ -5,6 +5,7 @@ import show from './commands/show';
 import pause from './commands/pause';
 import remove from './commands/remove';
 import previous from './commands/previous';
+import exit from './commands/exit';
 
 import { CommandClient } from './constants';
 
@@ -16,6 +17,7 @@ export default (client: CommandClient) => {
     client.commands!.set(pause.name, pause);
     client.commands!.set(remove.name, remove);
     client.commands!.set(previous.name, previous);
+    client.commands!.set(exit.name, exit);
 };
 
-export const getCommands = () => [help, play, skip, show, pause, remove, previous];
+export const getCommands = () => [help, play, skip, show, pause, remove, previous, exit];
