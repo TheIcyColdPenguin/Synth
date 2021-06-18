@@ -23,7 +23,7 @@ export default as<OwnCommand>({
         queue.playing = false;
         queue.currSong = 0;
         queue.lastUsersListeningCheck = Date.now();
-        queue.connection?.dispatcher.end();
+        queue.connection?.dispatcher?.end();
         queue.connection?.disconnect();
         queue.connection?.channel.leave();
         queue.connection = null;
