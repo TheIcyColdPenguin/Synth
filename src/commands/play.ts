@@ -36,6 +36,11 @@ export default as<OwnCommand>({
                 if (!queue.songs.isEmpty() && queue.songs.size() !== queue.currSong) {
                     // start playing songs
                     queue.lastUsersListeningCheck = Date.now();
+
+                    if (!queue.connection) {
+                        queue.connection = await voiceChannel.join();
+                    }
+
                     playSong(msg, queue);
                 } else if (queue.songs.isEmpty() || queue.songs.size() === queue.currSong) {
                     msg.channel.send('Please add songs to the queue to play!');
@@ -134,7 +139,7 @@ export default as<OwnCommand>({
                             );
                         }
                     } else {
-                        let embed = createEmbed(`Added ${video.title} to queue!`);
+                        let embed = createEmbed(video.title).setDescription('Added to queue!');
 
                         if (video.thumbnail) {
                             embed.setThumbnail(video.thumbnail);
