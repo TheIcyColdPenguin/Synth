@@ -1,7 +1,7 @@
 import { Message, MessageEmbed } from 'discord.js';
 import ytdl from 'ytdl-core-discord';
 import https from 'https';
-import { QueueConstruct, Song } from './constants';
+import { QueueConstruct, QueueOptions, Song } from './constants';
 
 const YT_SEARCH_URL = 'https://www.youtube.com/results?search_query=';
 
@@ -16,11 +16,19 @@ export const isUrl = (str: string) => {
     }
 };
 
-export const createEmbed = (title?: string) => {
-    const embed = new MessageEmbed().setColor('b4ded4');
+export const createEmbed = (title?: string, color?: 'success' | 'failure') => {
+    const embed = new MessageEmbed().setColor('b4ded4'); // default color
     if (title) {
         embed.setTitle(title);
     }
+
+    if (color === 'success') {
+        embed.setColor('#6ef093');
+    }
+    if (color === 'failure') {
+        embed.setColor('#cc6962');
+    }
+
     return embed;
 };
 

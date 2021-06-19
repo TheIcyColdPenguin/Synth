@@ -17,7 +17,7 @@ export default as<OwnCommand>({
         const playlist = userData.getPlaylist(msg.author.id, args[0].trim());
 
         if (!playlist) {
-            return void msg.channel.send(createEmbed('That playlist does not exist').setColor('#cc6962'));
+            return void msg.channel.send(createEmbed('That playlist does not exist', 'failure'));
         }
 
         msg.mentions.users.array().forEach(user => {

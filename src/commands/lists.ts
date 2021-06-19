@@ -18,7 +18,7 @@ export default as<OwnCommand>({
             const playlistData = userData.getPlaylist(msg.author.id, argument);
 
             if (!playlistData) {
-                return void msg.channel.send(createEmbed('Playlist not found').setColor('#cc6962'));
+                return void msg.channel.send(createEmbed('Playlist not found', 'failure'));
             }
 
             const embed = createEmbed(playlistData.name).addFields(
@@ -38,7 +38,7 @@ export default as<OwnCommand>({
 
         const allPlaylists = userData.getAllPlaylists(msg.author.id);
 
-        if (!allPlaylists || allPlaylists.length===0) {
+        if (!allPlaylists || allPlaylists.length === 0) {
             return void msg.channel.send(createEmbed('You have no saved playlists'));
         }
 

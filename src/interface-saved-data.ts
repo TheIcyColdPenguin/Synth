@@ -51,9 +51,7 @@ class UserData {
         }
 
         if (!this.userData[userId][playlistName]) {
-            return void msg?.channel.send(
-                createEmbed(playlistName).setDescription('Playlist not found').setColor('#cc6962')
-            );
+            return void msg?.channel.send(createEmbed(playlistName, 'failure').setDescription('Playlist not found'));
         }
 
         delete this.userData[userId][playlistName];
@@ -84,7 +82,7 @@ class UserData {
 
         if (Object.keys(this.userData[userId]).length >= 10 && !this.userData[userId][playlistName]) {
             if (msg) {
-                msg.channel.send(createEmbed('You have reached the limit of 10 saved playlists').setColor('#cc6962'));
+                msg.channel.send(createEmbed('You have reached the limit of 10 saved playlists', 'failure'));
             }
             return;
         }
@@ -110,7 +108,7 @@ class UserData {
 
             if (err) {
                 console.log(err);
-                const embed = createEmbed('There was an error saving the queue.').setColor('#cc6962');
+                const embed = createEmbed('There was an error saving the queue.', 'failure');
 
                 if (failureMessageContent) {
                     embed.setDescription(failureMessageContent);
