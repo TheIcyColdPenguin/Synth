@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { Message } from 'discord.js';
@@ -6,9 +6,9 @@ import { Message } from 'discord.js';
 import { Song } from './constants';
 import { createEmbed } from './helpers';
 
-import userdata from './userdata.json';
+const userdatapath = resolve(__dirname, '..', 'userdata.json');
 
-const savePath = resolve(__dirname, 'userdata.json');
+const userdata = JSON.parse(readFileSync(userdatapath).toString());
 
 interface PlaylistData {
     description: string;
@@ -101,7 +101,7 @@ class UserData {
     }
 
     saveQueue(msg?: Message, successMessageContent?: string, failureMessageContent?: string) {
-        fs.writeFile(savePath, JSON.stringify(this.userData), err => {
+        fs.writeFile(userdatapath, JSON.stringify(this.userData), err => {
             if (!msg) {
                 return;
             }
