@@ -20,7 +20,7 @@ export default as<OwnCommand>({
         const arg = args[0].trim();
         if (arg === 'song') {
             queue.options = QueueOptions.loopSong;
-            msg.channel.send(createEmbed('Now looping'));
+            msg.channel.send(createEmbed('Now looping song!'));
         } else if (arg === 'queue') {
             queue.options = QueueOptions.loopQueue;
             msg.channel.send(createEmbed('Now looping queue!'));

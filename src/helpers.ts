@@ -81,7 +81,7 @@ export const getVideoDetails = (searchTerm: string): Promise<Song> => {
 };
 
 const onFinish = (msg: Message, queue: QueueConstruct) => {
-    if (queue.currSong >= queue.songs.size() && queue.options === QueueOptions.loopQueue) {
+    if (queue.currSong >= queue.songs.size() - 1 && queue.options === QueueOptions.loopQueue) {
         queue.currSong = 0;
     } else if (queue.options != QueueOptions.loopSong) {
         queue.currSong += 1;
