@@ -139,7 +139,7 @@ export default as<OwnCommand>({
                             );
                         }
                     } else {
-                        let embed = createEmbed(video.title).setDescription('Added to queue!');
+                        let embed = createEmbed(video.title).setDescription('Added to queue!').setURL(video.url);
 
                         if (video.thumbnail) {
                             embed.setThumbnail(video.thumbnail);
