@@ -22,11 +22,19 @@ export const as = <T>(value: T) => value;
 
 export type Song = { title: string; url: string; length: string; thumbnail: string };
 
+export enum QueueOptions {
+    none,
+    shuffle,
+    loopSong,
+    loopQueue,
+}
+
 export interface QueueConstruct {
     songs: SongQueue<Song>;
     playing: boolean;
     currSong: number;
     lastUsersListeningCheck: number;
+    options?: QueueOptions;
     connection: VoiceConnection | null;
 }
 

@@ -11,6 +11,7 @@ import load from './commands/load';
 import lists from './commands/lists';
 import del from './commands/del';
 import share from './commands/share';
+import loop from './commands/loop';
 
 import { CommandClient } from './constants';
 
@@ -28,6 +29,22 @@ export default (client: CommandClient) => {
     client.commands!.set(lists.name, lists);
     client.commands!.set(del.name, del);
     client.commands!.set(share.name, share);
+    client.commands!.set(loop.name, loop);
 };
 
-export const getCommands = () => [help, play, skip, show, pause, remove, previous, exit, save, load, lists, del, share];
+export const getCommands = () => [
+    help,
+    play,
+    skip,
+    show,
+    pause,
+    remove,
+    previous,
+    exit,
+    save,
+    load,
+    lists,
+    del,
+    share,
+    loop,
+];
