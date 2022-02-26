@@ -16,16 +16,21 @@ export default as<OwnCommand>({
             return;
         }
 
-        let num = Number.parseInt(args[0]) || 1;
-        if (num<=0){ num = 1; }
+        let num = hasOnlyDigits(args[0]);
+        if (!num) {
+            return void msg.channel.send(createEmbed('Argument must be greater than 1'));
+        }
 
         if (queue.connection?.dispatcher) {
             queue.playing = false;
             queue.lastUsersListeningCheck = Date.now();
             queue.connection.dispatcher?.end();
             queue.currSong += num;
+            if (queue.currSong > queue.songs.size()) {
+                queue.currSong = queue.songs.size();
+            }
 
-            if (queue.currSong !== queue.songs.size()) {
+            if (queue.currSong < queue.songs.size()) {
                 playSong(msg, queue);
             }
         }
