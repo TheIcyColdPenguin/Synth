@@ -16,11 +16,14 @@ export default as<OwnCommand>({
             return;
         }
 
+        let num = Number.parseInt(args[0]) || 1;
+        if (num<=0){ num = 1; }
+
         if (queue.connection?.dispatcher) {
             queue.playing = false;
             queue.lastUsersListeningCheck = Date.now();
             queue.connection.dispatcher?.end();
-            queue.currSong += 1;
+            queue.currSong += num;
 
             if (queue.currSong !== queue.songs.size()) {
                 playSong(msg, queue);
