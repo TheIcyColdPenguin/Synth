@@ -36,24 +36,19 @@ export default as<OwnCommand>({
                 queue.currSong + showQueueSize
             );
 
-        // blue
-        // const lines: string[] = ['```ini'];
-        const lines: string[] = ['```diff'];
-
-        songsToShow.forEach((song, i) => {
-            const isCurrentSong = queue.currSong === i;
-
-            const maxLength = 76;
-            const requiredWhitespace = maxLength - song.title.length - song.length.length;
-
-            lines.push(
-                `${isCurrentSong ? '+' : ' '} ${song.title}${Array(
-                    requiredWhitespace < 0 ? 0 : requiredWhitespace
-                ).join(' ')}${song.length}`
-            );
-        });
-        lines.push('```');
-
-        msg.channel.send(lines.join('\n'));
+        msg.channel.send(
+            createEmbed('Current queue').addFields(
+                ...songsToShow.map((song, i) => {
+                    const isCurrentSong = queue.currSong === i;
+                    return [
+                        {
+                            name: isCurrentSong ? '-> ' + song.title : song.title,
+                            value: song.length,
+                            inline: false,
+                        },
+                    ];
+                })
+            )
+        );
     },
 });
