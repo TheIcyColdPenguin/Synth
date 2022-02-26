@@ -17,7 +17,9 @@ export default as<OwnCommand>({
         }
 
         let num = hasOnlyDigits(args[0]);
-        if (!num) {
+        if (num == false) {
+            num = 1;
+        } else if (num <= 0) {
             return void msg.channel.send(createEmbed('Argument must be greater than 1'));
         }
 
