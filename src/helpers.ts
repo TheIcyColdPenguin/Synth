@@ -127,7 +127,6 @@ export const playSong = async (msg: Message, queue: QueueConstruct) => {
             .on('finish', () => onFinish(msg, queue))
             .on('error', e => {
                 console.log('Something went wrong ', e);
-                throw new Error('Something went wrong');
             });
     } catch {
         onFinish(msg, queue);
@@ -162,3 +161,11 @@ export const millisecondsToTimeStamp = (millis: number) => {
 };
 
 export const timeStampToSeconds = (timestamp: string) => {};
+
+// https://stackoverflow.com/a/12646864
+export const shuffleArray = <T>(array: T[]): void => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+};

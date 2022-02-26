@@ -12,6 +12,7 @@ import lists from './commands/lists';
 import del from './commands/del';
 import share from './commands/share';
 import loop from './commands/loop';
+import shuffle from './commands/shuffle';
 
 import { CommandClient } from './constants';
 
@@ -30,6 +31,7 @@ export default (client: CommandClient) => {
     client.commands!.set(del.name, del);
     client.commands!.set(share.name, share);
     client.commands!.set(loop.name, loop);
+    client.commands!.set(shuffle.name, shuffle);
 };
 
 export const getCommands = () => [
