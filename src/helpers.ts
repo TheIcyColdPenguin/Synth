@@ -160,7 +160,11 @@ export const millisecondsToTimeStamp = (millis: number) => {
     return `${minutes}:${(seconds.length < 2 ? '0' : '') + seconds}`;
 };
 
-export const timeStampToSeconds = (timestamp: string) => {};
+export const timeStampToSeconds = (timestamp: string) => {
+    return timestamp.split(':').reduce((acc, val, i, arr) => {
+        return acc + parseInt(val) * 60 ** (arr.length - 1 - i);
+    }, 0);
+};
 
 // https://stackoverflow.com/a/12646864
 export const shuffleArray = <T>(array: T[]): void => {

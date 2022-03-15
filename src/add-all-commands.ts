@@ -13,6 +13,7 @@ import del from './commands/del';
 import share from './commands/share';
 import loop from './commands/loop';
 import shuffle from './commands/shuffle';
+import song from './commands/song';
 
 import { CommandClient } from './constants';
 
@@ -32,6 +33,7 @@ export default (client: CommandClient) => {
     client.commands!.set(share.name, share);
     client.commands!.set(loop.name, loop);
     client.commands!.set(shuffle.name, shuffle);
+    client.commands!.set(song.name, song);
 };
 
 export const getCommands = () => [
