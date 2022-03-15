@@ -21,13 +21,15 @@ export default as<OwnCommand>({
                 return void msg.channel.send(createEmbed('Playlist not found', 'failure'));
             }
 
-            const embed = createEmbed(playlistData.name).addFields(
-                playlistData.songs.map(song => ({
-                    name: song.title,
-                    value: song.length,
-                    inline: false,
-                }))
-            );
+            const embed = createEmbed(playlistData.name)
+                .setFooter(`${playlistData.songs.length} songs`)
+                .addFields(
+                    playlistData.songs.slice(0, 20).map(song => ({
+                        name: song.title,
+                        value: song.length,
+                        inline: false,
+                    }))
+                );
 
             if (playlistData.description) {
                 embed.setDescription(playlistData.description);
@@ -44,11 +46,15 @@ export default as<OwnCommand>({
 
         msg.channel.send(
             createEmbed('Your saved playlists').addFields(
-                allPlaylists.map(playlist => ({
-                    name: playlist.name,
-                    value: playlist.description || 'No description provided',
-                    inline: false,
-                }))
+                allPlaylists.map(playlist => {
+                    const fullPlaylist = userData.getPlaylist(msg.author.id, playlist.name);
+                    return {
+                        name: playlist.name,
+                        value: `${playlist.description || 'No description provided'}
+${fullPlaylist ? `${fullPlaylist.songs.length} songs` : ''}`,
+                        inline: false,
+                    };
+                })
             )
         );
     },
