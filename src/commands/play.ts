@@ -1,7 +1,8 @@
 import ytdl from 'ytdl-core';
 import ytpl from 'ytpl';
+import { Message, VoiceChannel } from 'discord.js';
 
-import { OwnCommand, as, assertQueueConstruct, Song } from '../constants';
+import { OwnCommand, as, assertQueueConstruct, Song, QueueConstruct } from '../constants';
 import { createEmbed, getVideoDetails, isUrl, millisecondsToTimeStamp, playSong } from '../helpers';
 
 export default as<OwnCommand>({
@@ -103,11 +104,17 @@ export default as<OwnCommand>({
                         return void msg.channel.send(embed);
                     }
 
-                    const details = await ytdl.getInfo(arg);
+                    const { videoDetails, timestamp, thumbnail_url } = await ytdl.getInfo(arg);
 
-                    return void msg.channel.send(
-                        `Name: ${details.videoDetails.title}\n ${details.videoDetails.video_url}`
-                    );
+                    const video: Song = {
+                        title: videoDetails.title,
+                        url: videoDetails.video_url,
+                        length:
+                            timestamp || millisecondsToTimeStamp(Number.parseInt(videoDetails.lengthSeconds) * 1000),
+                        thumbnail: thumbnail_url || '',
+                    };
+
+                    addOrPlaySong({ queue, video, voiceChannel, msg });
                 } catch (e) {
                     console.log(e);
                     return void msg.channel.send(`${arg} - something went wrong`);
@@ -124,31 +131,43 @@ export default as<OwnCommand>({
                 // add song to queue
 
                 {
-                    queue.songs.add(video);
-
-                    if (!queue.playing && queue.currSong === queue.songs.getFullQueue().length - 1) {
-                        // start playing song
-                        try {
-                            queue.connection = await voiceChannel.join();
-
-                            playSong(msg, queue);
-                        } catch (e) {
-                            console.log(e);
-                            return void msg.channel.send(
-                                'Something went wrong playing a song. Please check with the bot author'
-                            );
-                        }
-                    } else {
-                        let embed = createEmbed(video.title).setDescription('Added to queue!').setURL(video.url);
-
-                        if (video.thumbnail) {
-                            embed.setThumbnail(video.thumbnail);
-                        }
-                        msg.channel.send(embed);
-                    }
-                    queue.lastUsersListeningCheck = Date.now();
+                    addOrPlaySong({ queue, video, voiceChannel, msg });
                 }
             }
         }
     },
 });
+
+const addOrPlaySong = async ({
+    video,
+    queue,
+    voiceChannel,
+    msg,
+}: {
+    video: Song;
+    queue: QueueConstruct;
+    voiceChannel: VoiceChannel;
+    msg: Message;
+}) => {
+    queue.songs.add(video);
+
+    if (!queue.playing && queue.currSong === queue.songs.getFullQueue().length - 1) {
+        // start playing song
+        try {
+            queue.connection = await voiceChannel.join();
+
+            playSong(msg, queue);
+        } catch (e) {
+            console.log(e);
+            return void msg.channel.send('Something went wrong playing a song. Please check with the bot author');
+        }
+    } else {
+        let embed = createEmbed(video.title).setDescription('Added to queue!').setURL(video.url);
+
+        if (video.thumbnail) {
+            embed.setThumbnail(video.thumbnail);
+        }
+        msg.channel.send(embed);
+    }
+    queue.lastUsersListeningCheck = Date.now();
+};
