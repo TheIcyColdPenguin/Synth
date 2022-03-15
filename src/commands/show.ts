@@ -47,9 +47,14 @@ export default as<OwnCommand>({
             1000 * queue.songs.getFullQueue().reduce((acc, curr) => acc + timeStampToSeconds(curr.length), 0)
         );
 
+        const numSongs = queue.songs.items.length;
+
         msg.channel.send(
             createEmbed('Current queue')
-                .setFooter(`Queue Completion: ${finishedTime}/${totalTime}`)
+                .setFooter(
+                    `Queue Completion: ${finishedTime}/${totalTime}
+Song Completion: ${queue.currSong + 1 > numSongs ? numSongs : queue.currSong + 1}/${numSongs}`
+                )
                 .addFields(
                     ...songsToShow.map((song, i) => {
                         const isCurrentSong = queue.currSong === startIndex + i;
