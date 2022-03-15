@@ -14,6 +14,7 @@ import share from './commands/share';
 import loop from './commands/loop';
 import shuffle from './commands/shuffle';
 import song from './commands/song';
+import append from './commands/append';
 
 import { CommandClient } from './constants';
 
@@ -34,11 +35,12 @@ export default (client: CommandClient) => {
     client.commands!.set(loop.name, loop);
     client.commands!.set(shuffle.name, shuffle);
     client.commands!.set(song.name, song);
+    client.commands!.set(append.name, append);
 };
 
 export const getCommands = () => [
-    help,
     play,
+    help,
     skip,
     show,
     pause,
@@ -51,4 +53,7 @@ export const getCommands = () => [
     del,
     share,
     loop,
+    shuffle,
+    song,
+    append,
 ];
