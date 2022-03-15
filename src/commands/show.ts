@@ -29,17 +29,16 @@ export default as<OwnCommand>({
             return void msg.channel.send(createEmbed('The queue is currently empty'));
         }
 
-        const songsToShow = queue.songs
-            .getFullQueue()
-            .slice(
-                queue.currSong - showQueueSize <= 0 ? 0 : queue.currSong - showQueueSize,
-                queue.currSong + showQueueSize
-            );
+        const sideLength = Math.floor(showQueueSize / 2);
+        const nearBeginning = queue.currSong - sideLength <= 0;
+        const startIndex = nearBeginning ? 0 : queue.currSong - sideLength;
+        const endIndex = queue.currSong + sideLength + 1 - (nearBeginning ? queue.currSong - sideLength : 0);
+        const songsToShow = queue.songs.getFullQueue().slice(startIndex, endIndex);
 
         msg.channel.send(
             createEmbed('Current queue').addFields(
                 ...songsToShow.map((song, i) => {
-                    const isCurrentSong = queue.currSong === i;
+                    const isCurrentSong = queue.currSong === startIndex + i;
                     return [
                         {
                             name: isCurrentSong ? '-> ' + song.title : song.title,
