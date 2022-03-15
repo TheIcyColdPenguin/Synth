@@ -1,4 +1,4 @@
-import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
+import { OwnCommand, as } from '../constants';
 import { createEmbed } from '../helpers';
 import userData from '../interface-saved-data';
 

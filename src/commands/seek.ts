@@ -1,4 +1,4 @@
-import { OwnCommand, as, assertQueueConstruct, SongQueue, Song } from '../constants';
+import { OwnCommand, as, assertQueueConstruct } from '../constants';
 import { playSong } from '../helpers';
 
 export default as<OwnCommand>({

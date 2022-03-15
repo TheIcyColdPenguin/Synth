@@ -1,4 +1,4 @@
-import { OwnCommand, as, assertQueueConstruct, QueueOptions } from '../constants';
+import { OwnCommand, as, assertQueueConstruct } from '../constants';
 import { createEmbed, millisecondsToTimeStamp, timeStampToSeconds } from '../helpers';
 
 export default as<OwnCommand>({

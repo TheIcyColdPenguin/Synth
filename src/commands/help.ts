@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { OwnCommand, as } from '../constants';
 import { getCommands } from '../add-all-commands';
 import { createEmbed } from '../helpers';
