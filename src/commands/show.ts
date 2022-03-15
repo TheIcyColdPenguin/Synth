@@ -1,5 +1,5 @@
 import { OwnCommand, as, assertQueueConstruct, showQueueSize } from '../constants';
-import { createEmbed } from '../helpers';
+import { createEmbed, millisecondsToTimeStamp, timeStampToSeconds } from '../helpers';
 import play from './play';
 
 export default as<OwnCommand>({
@@ -35,19 +35,33 @@ export default as<OwnCommand>({
         const endIndex = queue.currSong + sideLength + 1 - (nearBeginning ? queue.currSong - sideLength : 0);
         const songsToShow = queue.songs.getFullQueue().slice(startIndex, endIndex);
 
+        const finishedTime = millisecondsToTimeStamp(
+            1000 *
+                (queue.songs
+                    .getFullQueue()
+                    .slice(0, queue.currSong)
+                    .reduce((acc, curr) => acc + timeStampToSeconds(curr.length), 0) +
+                    queue.connection.dispatcher.streamTime / 1000)
+        );
+        const totalTime = millisecondsToTimeStamp(
+            1000 * queue.songs.getFullQueue().reduce((acc, curr) => acc + timeStampToSeconds(curr.length), 0)
+        );
+
         msg.channel.send(
-            createEmbed('Current queue').addFields(
-                ...songsToShow.map((song, i) => {
-                    const isCurrentSong = queue.currSong === startIndex + i;
-                    return [
-                        {
-                            name: isCurrentSong ? '-> ' + song.title : song.title,
-                            value: song.length,
-                            inline: false,
-                        },
-                    ];
-                })
-            )
+            createEmbed('Current queue')
+                .setFooter(`Queue Completion: ${finishedTime}/${totalTime}`)
+                .addFields(
+                    ...songsToShow.map((song, i) => {
+                        const isCurrentSong = queue.currSong === startIndex + i;
+                        return [
+                            {
+                                name: isCurrentSong ? '-> ' + song.title : song.title,
+                                value: song.length,
+                                inline: false,
+                            },
+                        ];
+                    })
+                )
         );
     },
 });
