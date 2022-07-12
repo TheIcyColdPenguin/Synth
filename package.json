@@ -11,7 +11,7 @@
     "author": "TheIcyColdPenguin",
     "license": "MIT",
     "dependencies": {
-        "@discordjs/opus": "^0.5.0",
+        "@discordjs/opus": "^0.8.0",
         "discord.js": "^12.5.1",
         "node-cleanup": "^2.1.2",
         "ytdl-core": "^4.11.0",
