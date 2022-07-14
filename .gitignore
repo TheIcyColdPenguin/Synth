@@ -1,4 +1,4 @@
 node_modules
 config.json
-userdata.json
+*userdata.json
 build
