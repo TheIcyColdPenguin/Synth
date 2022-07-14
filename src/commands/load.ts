@@ -19,13 +19,17 @@ export default as<OwnCommand>({
             return;
         }
 
-        const songs = userData.getPlaylist(msg.author.id, args[0].trim());
+        if (args.length > 1 || args[0].trim().includes(' ')) {
+            return void msg.channel.send(createEmbed('Playlist names cannot contain spaces'));
+        }
+
+        const songs = userData.getPlaylistByName(msg.author.id, args[0].trim());
 
         if (!songs) {
             return void msg.channel.send(createEmbed('That playlist was not found'));
         }
 
-        msg.channel.send(createEmbed(songs.name).setDescription(songs.description || 'Playing now'));
+        msg.channel.send(createEmbed(songs.name).setDescription(`${songs.id} - ${songs.description || 'Playing now'}`));
 
         queue.playing = false;
         queue.currSong = 0;

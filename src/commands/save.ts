@@ -21,12 +21,29 @@ export default as<OwnCommand>({
             return msg.channel.send('Cannot save an empty queue');
         }
 
-        userData.setPlaylist({
-            userId: msg.author.id,
-            playlistName: args[0].trim(),
-            playlist: queue.songs.items,
-            description: args[1]?.trim() || '',
-            msg,
-        });
+        if (args[0].trim().includes(' ')) {
+            return msg.channel.send('Playlist names cannot contain spaces');
+        }
+
+        const description = args[1]?.trim() || '';
+
+        const playlist = userData.getPlaylistByName(msg.author.id, args[0].trim());
+        if (!playlist) {
+            userData.createPlaylist({
+                userId: msg.author.id,
+                playlistName: args[0].trim(),
+                songs: queue.songs.items,
+                description,
+                msg,
+            });
+        } else {
+            userData.updatePlaylist({
+                userId: msg.author.id,
+                playlistName: playlist.name,
+                songs: queue.songs.items,
+                description: description || playlist.description,
+                msg,
+            });
+        }
     },
 });

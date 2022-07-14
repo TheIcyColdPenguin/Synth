@@ -14,10 +14,14 @@ export default as<OwnCommand>({
     guildOnly: false,
 
     execute: (msg, args) => {
-        const allPlaylists = userData.getAllPlaylists(msg.author.id);
+        const allPlaylists = userData.getAllPlaylistDetails(msg.author.id);
 
         if (!allPlaylists) {
             return void msg.channel.send(createEmbed('You have no saved playlists'));
+        }
+
+        if (args.length > 1 || args[0].trim().includes(' ')) {
+            return void msg.channel.send(createEmbed('Playlist names cannot contain spaces'));
         }
 
         userData.removePlaylist({

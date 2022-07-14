@@ -10,7 +10,8 @@ import save from './commands/save';
 import load from './commands/load';
 import lists from './commands/lists';
 import del from './commands/del';
-import share from './commands/share';
+import reference from './commands/reference';
+import clone from './commands/clone';
 import loop from './commands/loop';
 import shuffle from './commands/shuffle';
 import song from './commands/song';
@@ -32,11 +33,13 @@ export default (client: CommandClient) => {
     client.commands!.set(load.name, load);
     client.commands!.set(lists.name, lists);
     client.commands!.set(del.name, del);
-    client.commands!.set(share.name, share);
+    client.commands!.set(reference.name, reference);
     client.commands!.set(loop.name, loop);
     client.commands!.set(shuffle.name, shuffle);
     client.commands!.set(song.name, song);
     client.commands!.set(append.name, append);
+    client.commands!.set(clone.name, clone);
+    client.commands!.set(seek.name, seek);
 };
 
 export const getCommands = () => [
@@ -52,9 +55,11 @@ export const getCommands = () => [
     load,
     lists,
     del,
-    share,
+    reference,
     loop,
     shuffle,
     song,
     append,
+    clone,
+    seek,
 ];

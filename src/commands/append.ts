@@ -25,21 +25,23 @@ export default as<OwnCommand>({
         if (!argument) {
             return void msg.channel.send(createEmbed('No playlist was provided'));
         }
+        if (args.length > 1 || argument.includes(' ')) {
+            return void msg.channel.send(createEmbed('Playlist names cannot contain spaces'));
+        }
 
         if (queue.songs.isEmpty()) {
             return void msg.channel.send(createEmbed('The queue is currently empty'));
         }
 
-        const playlistData = userData.getPlaylist(msg.author.id, argument);
+        const playlistData = userData.getPlaylistByName(msg.author.id, argument);
         if (!playlistData) {
             return void msg.channel.send(createEmbed('Playlist not found', 'failure'));
         }
 
-        userData.setPlaylist({
+        userData.updatePlaylist({
             userId: msg.author.id,
             playlistName: playlistData.name,
-            playlist: playlistData.songs.concat(queue.songs.items),
-            description: playlistData.description,
+            songs: playlistData.songs.concat(queue.songs.items),
             msg,
         });
     },
