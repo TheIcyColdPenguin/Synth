@@ -41,7 +41,7 @@ export default as<OwnCommand>({
                     .getFullQueue()
                     .slice(0, queue.currSong)
                     .reduce((acc, curr) => acc + timeStampToSeconds(curr.length), 0) +
-                    queue.connection.dispatcher.streamTime / 1000)
+                    queue.connection.dispatcher?.streamTime / 1000)
         );
         const totalTime = millisecondsToTimeStamp(
             1000 * queue.songs.getFullQueue().reduce((acc, curr) => acc + timeStampToSeconds(curr.length), 0)

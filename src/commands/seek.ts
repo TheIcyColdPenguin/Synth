@@ -22,7 +22,7 @@ export default as<OwnCommand>({
         }
 
         const time = parseInt(args[0]);
-        const relativeOrAbsolute = args[1].toLowerCase() || 'relative';
+        const relativeOrAbsolute = args[1]?.toLowerCase() || 'relative';
 
         if (!Number.isInteger(time)) {
             return void msg.reply('Invalid timestamp, please enter a valid integer');
@@ -31,7 +31,7 @@ export default as<OwnCommand>({
         let absoluteTimeStamp = time;
 
         if (relativeOrAbsolute === 'relative' || relativeOrAbsolute === 'r') {
-            absoluteTimeStamp += Math.floor(queue.connection.dispatcher.streamTime / 1000);
+            absoluteTimeStamp += Math.floor(queue.connection.dispatcher?.streamTime / 1000);
         }
 
         queue.connection.dispatcher?.end();

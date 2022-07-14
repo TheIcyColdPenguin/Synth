@@ -25,10 +25,10 @@ export default as<OwnCommand>({
         const song = queue.songs.items[queue.currSong];
 
         const currSongLengthSeconds = timeStampToSeconds(song.length);
-        const currProgressTimeStamp = millisecondsToTimeStamp(queue.connection.dispatcher.streamTime);
+        const currProgressTimeStamp = millisecondsToTimeStamp(queue.connection.dispatcher?.streamTime);
 
         const progressBarLength = 20;
-        const progressNum = Math.floor((20 * queue.connection.dispatcher.streamTime) / 1000 / currSongLengthSeconds);
+        const progressNum = Math.floor((20 * queue.connection.dispatcher?.streamTime) / 1000 / currSongLengthSeconds);
 
         const progressBar = `|${'•'.repeat(progressNum)}>${'-'.repeat(progressBarLength - progressNum)}|`;
 

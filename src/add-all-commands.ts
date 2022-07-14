@@ -15,6 +15,7 @@ import loop from './commands/loop';
 import shuffle from './commands/shuffle';
 import song from './commands/song';
 import append from './commands/append';
+import seek from './commands/seek';
 
 import { CommandClient } from './constants';
 
